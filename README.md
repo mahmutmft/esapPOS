@@ -13,7 +13,7 @@
 
 The project started as a Java command-line prototype and is growing into a complete restaurant management application for owners, administrators, and waiters. ESAP will bring ordering, tables, stock, sales, and reporting together in one system designed around local restaurant workflows.
 
-> ESAP is currently in early development. The core business logic is working, while the graphical application, persistent storage, and production features are still planned.
+> ESAP is currently in early development. The core business logic is working and PostgreSQL persistence is being introduced, while the graphical application and production features are still planned.
 
 ## Current Features
 
@@ -27,6 +27,8 @@ The project started as a Java command-line prototype and is growing into a compl
 - Total inventory value calculation
 - Sales history preserved independently from active orders
 - Sales reports by waiter, month, and year
+- PostgreSQL schema for the core restaurant entities
+- JDBC item persistence foundation using prepared statements
 - Command-line simulations for the main business workflows
 - Unit and edge-case coverage with JUnit 5
 
@@ -71,7 +73,8 @@ The final application is planned to support:
 - [x] Core item, order, table, stock, waiter, and sale models
 - [x] Stock movement tracking and sales reporting logic
 - [x] Unit and edge-case test suite
-- [ ] Persistent database storage
+- [x] PostgreSQL schema and item persistence foundation
+- [ ] Complete PostgreSQL repositories for all entities
 - [ ] Administrator authentication and dashboard
 - [ ] Waiter accounts and permissions
 - [ ] Visual restaurant floor and table map
@@ -87,12 +90,13 @@ The final application is planned to support:
 
 - Java 21
 - Maven 3.9 or newer, or the Maven integration bundled with IntelliJ IDEA
+- PostgreSQL for database-backed development
 
 ### Clone the project
 
 ```bash
-git clone https://github.com/mahmutmft/pos.git
-cd pos
+git clone https://github.com/mahmutmft/esapPOS.git
+cd esapPOS
 ```
 
 ### Run the tests
@@ -117,6 +121,18 @@ java -cp target/classes com.mahmutmft.pos.simulation.OrderStockSimulation
 
 Other available simulations cover orders, sales, stock, stock movements, tables, and waiter accounts.
 
+### Database foundation
+
+The current JDBC connection expects a local PostgreSQL database named `esap`, the user `postgres`, and the password in the `ESAP_DB_PASSWORD` environment variable. The database tables are defined in `database/schema.sql`.
+
+In PowerShell, set the password for the current terminal session with:
+
+```powershell
+$env:ESAP_DB_PASSWORD = "your-local-password"
+```
+
+Never commit the local `.env` file or a real database password.
+
 ## Project Structure
 
 ```text
@@ -128,13 +144,18 @@ src/
 │   ├── stock/         Inventory and stock movements
 │   ├── table/         Restaurant tables and payments
 │   ├── waiter/        Waiter accounts
+│   ├── repository/    JDBC persistence repositories
 │   └── simulation/    Executable workflow examples
+├── main/java/database/
+│   └── Database connection and executable JDBC examples
 └── test/java/com/mahmutmft/pos/
     ├── item/
     ├── order/
     ├── sale/
     ├── stock/
     └── table/
+database/
+└── schema.sql          PostgreSQL database schema
 ```
 
 ## Testing
