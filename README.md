@@ -6,7 +6,7 @@
 
 [![Java 21](https://img.shields.io/badge/Java-21-E11F21?logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
 [![Maven](https://img.shields.io/badge/build-Maven-C71A36?logo=apachemaven&logoColor=white)](https://maven.apache.org/)
-![Tests](https://img.shields.io/badge/tests-40%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-46%20passing-brightgreen)
 ![Status](https://img.shields.io/badge/status-early%20development-orange)
 
 **ESAP** is an open-source point-of-sale application being built for restaurants in North Macedonia.
@@ -160,7 +160,7 @@ database/
 
 ## Testing
 
-The test suite currently contains 40 unit and edge-case tests. It covers normal behavior as well as invalid prices, invalid quantities, insufficient stock, repeated order confirmation, missing waiter assignments, and sale-history isolation.
+The test suite currently contains 46 unit and edge-case tests. It covers normal behavior as well as invalid prices, invalid quantities, insufficient stock, repeated order confirmation, missing waiter assignments, sale-history isolation, and JDBC item repository behavior.
 
 Run a specific test class with:
 
