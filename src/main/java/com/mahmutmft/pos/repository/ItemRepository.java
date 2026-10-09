@@ -2,9 +2,7 @@ package com.mahmutmft.pos.repository;
 
 import com.mahmutmft.pos.item.Item;
 import database.DatabaseConnection;
-import jdk.dynalink.linker.LinkerServices;
 
-import javax.xml.crypto.Data;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,12 +10,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ItemRepository {
 
+    private final ConnectionProvider connectionProvider;
+
+    public ItemRepository() {
+        this(DatabaseConnection::getConnection);
+    }
+
+    ItemRepository(ConnectionProvider connectionProvider) {
+        this.connectionProvider = Objects.requireNonNull(connectionProvider);
+    }
+
     public void save(Item item) throws SQLException {
         String query = "INSERT INTO ITEM (name, price, description, image_path) VALUES (?,?,?,?)";
-        try (Connection connection = DatabaseConnection.getConnection()){
+        try (Connection connection = connectionProvider.getConnection()){
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, item.getName());
             statement.setBigDecimal(2, item.getPrice());
@@ -31,7 +40,7 @@ public class ItemRepository {
         List<Item> items = new ArrayList<>();
         String query = "SELECT * FROM ITEM";
 
-        try (Connection connection = DatabaseConnection.getConnection()){
+        try (Connection connection = connectionProvider.getConnection()){
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet =  statement.executeQuery();
 
@@ -50,7 +59,7 @@ public class ItemRepository {
 
     public Item findById(int id) throws SQLException{
         String query = "SELECT * FROM ITEM WHERE ID = ?";
-        try (Connection connection = DatabaseConnection.getConnection()){
+        try (Connection connection = connectionProvider.getConnection()){
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
